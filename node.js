@@ -12,15 +12,6 @@ await client.connect();
 console.log("Connected to Redis!");
 
 // 1. Create a short URL
-// app.get('/shorten', async (req, res) => {
-//     const { url, code } = req.query;
-//     if (!url || !code) return res.status(400).send("Missing URL or Code");
-    
-//     await client.set(`url:${code}`, url);
-//     await client.set(`clicks:${code}`, 0);
-//     res.send(`Shortened successfully`);
-// });
-
 
 // This defines the /shorten "Endpoint"
 app.get('/shorten', async (req, res) => {
@@ -32,7 +23,7 @@ app.get('/shorten', async (req, res) => {
 
     try {
         await client.set(`url:${code}`, url);
-        // await client.set(`clicks:${code}`, 0);
+        await client.set(`clicks:${code}`, 0);
 
 
         // console.log(client.get(`url:${code}`));
@@ -57,9 +48,9 @@ app.get('/:code', async (req, res) => {
 // 3. Get Analytics
 app.get('/stats/:code', async (req, res) => {
     console.log(`req.params.code  : ${req.params.code}` );
-    
+
     const clicks = await client.get(`clicks:${req.params.code}`);
     res.json({ code: req.params.code, clicks: clicks || 0 });
 });
 
-app.listen(3002, '0.0.0.0',() => console.log('Server running on http://10.10.15.140:3002'));
+app.listen(3003, '0.0.0.0',() => console.log('Server running on http://10.10.15.140:3003'));
